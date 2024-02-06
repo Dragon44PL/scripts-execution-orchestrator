@@ -6,19 +6,20 @@ import io.github.orchestrator.script.vo.ScriptSessionId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-import java.util.List;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Document
-record ScriptExecutions(@Id ScriptSessionId id, List<ScriptExecution> executions) {
+record ScriptExecutions(@Id ScriptSessionId id, Set<ScriptExecution> executions) {
 
-    List<ScriptExecution> getCurrentFailedExecutions() {
+    Set<ScriptExecution> getCurrentFailedExecutions() {
         return this.executions.stream()
              .filter(execution -> !execution.isHistorical())
              .filter(execution -> ScriptExecutionState.FAILED.equals(execution.getState()))
-             .collect(Collectors.toList());
+             .collect(Collectors.toSet());
     }
 
     Optional<ScriptExecution> getExecutionById(ScriptExecutionId id) {
@@ -31,7 +32,7 @@ record ScriptExecutions(@Id ScriptSessionId id, List<ScriptExecution> executions
         this.getCurrentFailedExecutions().forEach(ScriptExecution::markAsHistorical);
     }
 
-    void addExecutions(List<ScriptExecution> executions) {
+    void addExecutions(Collection<ScriptExecution> executions) {
         this.executions.addAll(executions);
     }
 }
