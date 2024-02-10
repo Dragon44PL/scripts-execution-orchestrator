@@ -2,7 +2,7 @@ package io.github.orchestrator.script;
 
 import io.github.orchestrator.script.dto.ScriptsStartDto;
 import io.github.orchestrator.script.notifier.ScriptExecutionNotifier;
-import io.github.orchestrator.script.notifier.ScriptStartNotifyDto;
+import io.github.orchestrator.script.notifier.ScriptStartEvent;
 import io.github.orchestrator.script.vo.ScriptSessionId;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +36,7 @@ class DefaultScriptExecutionsRunner implements ScriptExecutionsRunner {
     private void sendExecutions(ScriptExecutions executions) {
         executions.executions().forEach(execution -> {
             log.debug("Sending script execution notification : {}", executions);
-            scriptExecutionNotifier.sendNotification(execution.getMachine(), new ScriptStartNotifyDto(execution.getId(), executions.id(), execution.getCommand()));
+            scriptExecutionNotifier.sendNotification(execution.getMachine(), new ScriptStartEvent(execution.getId(), executions.id(), execution.getCommand()));
         });
     }
 
