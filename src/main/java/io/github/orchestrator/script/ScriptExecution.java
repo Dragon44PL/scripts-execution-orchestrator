@@ -17,6 +17,7 @@ import java.time.Instant;
 class ScriptExecution {
     @Id
     private ScriptExecutionId id;
+    private Long pid;
     private Integer exitCode;
     private String machine;
     private Command command;
@@ -51,3 +52,4 @@ class ScriptExecution {
                 .build();
     }
 }
+
